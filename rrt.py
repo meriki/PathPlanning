@@ -1,16 +1,12 @@
-
-
 import math, sys, pygame, random
 from math import *
 from pygame import *
-
 
 class Node(object):
     def __init__(self, point, parent):
         super(Node, self).__init__()
         self.point = point
         self.parent = parent
-
 
 XDIM = 720
 YDIM = 500
@@ -30,21 +26,17 @@ blue = 0, 255, 0
 green = 0, 0, 255
 cyan = 0,180,105
 
-
 count = 0
 rectObs = []
 
-
 def dist(p1,p2):    #distance between two points
     return sqrt((p1[0]-p2[0])*(p1[0]-p2[0])+(p1[1]-p2[1])*(p1[1]-p2[1]))
-
 
 def point_circle_collision(p1, p2, radius):
     distance = dist(p1,p2)
     if (distance <= radius):
         return True
     return False
-
 
 def step_from_to(p1,p2):
     if dist(p1,p2) < delta:
@@ -53,13 +45,11 @@ def step_from_to(p1,p2):
         theta = atan2(p2[1]-p1[1],p2[0]-p1[0])
         return p1[0] + delta*cos(theta), p1[1] + delta*sin(theta)
 
-
 def collides(p):    #check if point collides with the obstacle
     for rect in rectObs:
         if rect.collidepoint(p) == True:
             return True
     return False
-
 
 def get_random_clear():
     while True:
@@ -67,9 +57,6 @@ def get_random_clear():
         noCollision = collides(p)
         if noCollision == False:
             return p
-
-
-
 
 def init_obstacles(configNum):  #initialized the obstacle
     global rectObs
@@ -85,19 +72,14 @@ def init_obstacles(configNum):  #initialized the obstacle
     if (configNum == 3):
         rectObs.append(pygame.Rect((100,50),(200,150)))
 
-
     for rect in rectObs:
         pygame.draw.rect(screen, black, rect)
-
-
-
 
 def reset():
     global count
     screen.fill(white)
     init_obstacles(GAME_LEVEL)
     count = 0
-
 
 def main():
     global count
@@ -108,10 +90,8 @@ def main():
     goalPoint = Node(None, None)
     currentState = 'init'
 
-
     nodes = []
     reset()
-
 
     while True:
         if currentState == 'init':
@@ -122,8 +102,6 @@ def main():
             currNode = goalNode.parent
             pygame.display.set_caption('Goal Reached')
             print "Goal Reached"
-
-
             
             while currNode.parent != None:
                 pygame.draw.line(screen,red,currNode.point,currNode.parent.point)
@@ -143,10 +121,9 @@ def main():
                     for p in nodes:
                         if dist(p.point,rand) <= dist(parentNode.point,rand):
                             newPoint = step_from_to(p.point,rand)
-                            if collides(newPoint) == False:
+                            if collides(newPoint) == False: 
                                 parentNode = p
                                 foundNext = True
-
 
                 newnode = step_from_to(parentNode.point,rand)
                 nodes.append(Node(newnode, parentNode))
@@ -158,13 +135,10 @@ def main():
 
 
                     goalNode = nodes[len(nodes)-1]
-
-
-                
+               
             else:
                 print("Ran out of nodes... :(")
                 return;
-
 
         #handle events
         for e in pygame.event.get():
@@ -177,7 +151,6 @@ def main():
                         nodes = []
                         if collides(e.pos) == False:
                             print('initiale point set: '+str(e.pos))
-
 
                             initialPoint = Node(e.pos, None)
                             nodes.append(initialPoint) # Start in the center
@@ -196,25 +169,9 @@ def main():
                     goalPoseSet = False
                     reset()
 
-
         pygame.display.update()
         fpsClock.tick(10000)
 
 
-
-
-
 if __name__ == '__main__':
     main()
-    
-
-
-
-
-
-
-
-
-
-
-
